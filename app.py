@@ -36,8 +36,16 @@ def main():
     Boston = load_dataframe()
     #Showing the snapshot of the data
     st.write(Boston.head(5))
+
+    user_input = st.text_input(" Give rad value RAD", 1)
+
+    record = Boston.loc[Boston['RAD'] == int(user_input)]
+
+    st.write(record)
+
+    #Just pass the record into the Model.predict(record)
     
-    
+    #--------------------------------------------------------------------------------------------------------
     #Defining X and Y
     x = Boston.loc[:, Boston.columns != 'MEDV'].values
     y = Boston.loc[:, Boston.columns == 'MEDV'].values
@@ -68,16 +76,8 @@ def main():
     st.write('RMSE of the XGBoost model on test set:', round(np.sqrt(metrics.mean_squared_error(y_test, loaded_predictions)),2))
     
     
-    #Tree Visualization------------------------------------------------------------------------------------------
-    try:
-        st.write('below, all seperate decision trees that have been build by training the model can be reviewed')
-        ntree=st.number_input('Select the desired record for detailed explanation on the training set'
-                                           ,min_value=1,max_value=5)
-                                           
-        tree=xgb.to_graphviz(loaded_model,num_trees=ntree)
-        st.graphviz_chart(tree)
-    except:
-        pass
+   
+   
     
     
     #feature importance-------------------------------------------------------------------------------------------
@@ -146,4 +146,3 @@ def main():
     
 if __name__ == '__main__':
     main()
-   
